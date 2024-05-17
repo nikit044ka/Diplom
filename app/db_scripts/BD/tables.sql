@@ -1,67 +1,117 @@
-CREATE TABLE patients(
+CREATE TABLE kinds (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR(100),
-    surname VARCHAR(100),
-    patrony VARCHAR(100),
-    passport VARCHAR(100),
-    meeting VARCHAR(100),
-    gender VARCHAR(100),
-    adress VARCHAR(100),
-    num_telefone VARCHAR(100),
-    email VARCHAR(100),
-    num_card VARCHAR(100),
-    data_meeting INT NOT NULL DEFAULT (strftime('%s','now')),
-    data_last INT NOT NULL DEFAULT (strftime('%s','now')),
-    data_next INT NOT NULL DEFAULT (strftime('%s','now')),
-    num_polis VARCHAR(100),
-    data_stop_polis INT NOT NULL DEFAULT (strftime('%s','now'))
+    name VARCHAR(50)
 );
 
-CREATE TABLE events(
+CREATE TABLE posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    data_event INT NOT NULL DEFAULT (strftime('%s','now')),
-    doctor VARCHAR(100),
-    name_event VARCHAR(100),
-    results VARCHAR(100)
+    name VARCHAR(50)
 );
 
-CREATE TABLE doctors(
+CREATE TABLE breeds (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR(100),
-    password VARCHAR(100)
+    name VARCHAR(50),
+    kind_id INT,
+    FOREIGN KEY (kind_id) REFERENCES kind_id(id)
+);
+
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fio VARCHAR(100),
+    phone INT,
+    addres VARCHAR(255),
+    email VARCHAR(50),
+    login VARCHAR(50),
+    password VARCHAR(50),
+    post_id INT,
+    FOREIGN KEY (post_id) REFERENCES posts(id)
+);
+
+CREATE TABLE patients (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name  VARCHAR(100),
+    date_birth DATA,
+    breed_id INT,
+    kind_id INT,
+    FOREIGN KEY (breed_id) REFERENCES breeds(id),
+    FOREIGN KEY (kind_id) REFERENCES kinds(id)
+);
+
+CREATE TABLE procedures (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name  VARCHAR(100),
+    comment TEXT,
+    price INT
+);
+
+CREATE TABLE orders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    data DATA,
+    comment  DTEXTATA,
+    procedure_id INT,
+    user_id INT,
+    patient_id INT,
+    FOREIGN KEY (procedure_id) REFERENCES procedures(id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (patient_id) REFERENCES patients(id)
 );
 
 
+INSERT INTO kinds (id, name) VALUES 
+(1, 'Собаки'),
+(2, 'Кошки'),
+(3, 'Птицы');
 
+INSERT INTO posts (id, name) VALUES
+(1, 'Главный врач'),
+(2, 'Доктор');
 
-INSERT INTO patients (name, surname, patrony, passport, meeting, gender, adress, num_telefone, email, num_card, num_polis)
-VALUES
-('John', 'Doe', 'Smith', 'AB1234567', 'General Checkup', 'Male', '123 Main St', '555-1234', 'john.doe@email.com', '1234 5678 9012 3456', 'PL1234567'),
-('Alice', 'Johnson', 'Anne', 'CD2345678', 'Vaccination', 'Female', '456 Elm St', '555-5678', 'alice.johnson@email.com', '5678 9012 3456 7890', 'PL2345678'),
-('Michael', 'Williams', 'David', 'EF3456789', 'Dental Cleaning', 'Male', '789 Oak St', '555-9012', 'michael.williams@email.com', '9012 3456 7890 1234', 'PL3456789'),
-('Sarah', 'Brown', 'Jane', 'GH4567890', 'Eye Exam', 'Female', '321 Pine St', '555-3456', 'sarah.brown@email.com', '3456 7890 1234 5678', 'PL4567890'),
-('James', 'Davis', 'Robert', 'IJ5678901', 'Physical Therapy', 'Male', '654 Birch St', '555-7890', 'james.davis@email.com', '6789 0123 4567 8901', 'PL5678901'),
-('Emma', 'Wilson', 'Grace', 'KL6789012', 'Allergy Testing', 'Female', '987 Maple St', '555-2345', 'emma.wilson@email.com', '2345 6789 0123 4567', 'PL6789012'),
-('Daniel', 'Martinez', 'Carlos', 'MN7890123', 'X-ray', 'Male', '210 Cedar St', '555-6789', 'daniel.martinez@email.com', '7890 1234 5678 9012', 'PL7890123'),
-('Olivia', 'Garcia', 'Maria', 'OP8901234', 'Blood Test', 'Female', '543 Walnut St', '555-1234', 'olivia.garcia@email.com', '1234 5678 9012 3456', 'PL8901234'),
-('William', 'Lopez', 'Juan', 'QR9012345', 'MRI Scan', 'Male', '876 Sycamore St', '555-5678', 'william.lopez@email.com', '5678 9012 3456 7890', 'PL9012345'),
-('Sophia', 'Rodriguez', 'Ana', 'ST0123456', 'Ultrasound', 'Female', '109 Pinecrest St', '555-9012', 'sophia.rodriguez@email.com', '9012 3456 7890 1234', 'PL0123456');
+INSERT INTO breeds (name, kind_id) VALUES 
+('Лабрадор ретривер', 1),
+('Немецкая овчарка', 1),
+('Бигль', 1),
+('Немецкий шпиц', 1),
+('чихуахуа', 1),
+('Йоркширский терьер', 1),
+('Лабрадор-ретривер', 1),
+('пудель', 1),
+('Бостон-терьер', 1),
+('Мейн-кун', 2),
+('Сфинкс', 2),
+('Британская кошка', 2),
+('Шотландская кошка', 2),
+('Сиамская кошка', 2),
+('Ориентальная кошка', 2),
+('Бенгальская кошка', 2),
+('Попугай', 3),
+('Чижик', 3),
+('Соловей', 3),
+('Канарейка', 3);
 
-INSERT INTO events (data_event, doctor, name_event, results)
-VALUES
-(strftime('%s', 'now'), 'Dr. Smith', 'Checkup', 'Normal'),
-(strftime('%s', 'now'), 'Dr. Johnson', 'Vaccination', 'Completed'),
-(strftime('%s', 'now'), 'Dr. Williams', 'Cleaning', 'No Issues'),
-(strftime('%s', 'now'), 'Dr. Brown', 'Exam', 'Slight Prescription'),
-(strftime('%s', 'now'), 'Dr. Davis', 'Therapy', 'Improving'),
-(strftime('%s', 'now'), 'Dr. Wilson', 'Testing', 'As Expected'),
-(strftime('%s', 'now'), 'Dr. Martinez', 'Scan', 'Detailed Report Pending'),
-(strftime('%s', 'now'), 'Dr. Garcia', 'Test', 'Pending Results'),
-(strftime('%s', 'now'), 'Dr. Lopez', 'Scan', 'Clear Images'),
-(strftime('%s', 'now'), 'Dr. Rodriguez', 'Ultrasound', 'Healthy Fetus');
+INSERT INTO users (fio, phone, addres, email, login, password, post_id) VALUES
+('Иванов Иван Иванович', 79464918206, 'ул. Пушкина, 10', 'ivanov@example.com', 'admin', 'admin', 1),
+('Сидоров Александр Тимурович', 79464918206, 'Трудовая ул., 24', 'sidorov@example.com', 'doctor1', 'doctor1', 2),
+('Лебедев Тимур Даниилович', 79434578206, 'Юбилейная ул., 12', 'lebedev@example.com', 'doctor2', 'doctor2', 2),
+('Петров Петр Петрович', 7946394746, 'Лесная ул., 3', 'petrov@example.com', 'doctor3', 'doctor3', 2);
 
-INSERT INTO doctors (name, password)
-VALUES
-('admin', 'admin'),
-('doc1', 'doc1'),
-('doc2', 'doc2');
+INSERT INTO procedures (name, comment, price) VALUES
+('Общий осмотр', 'Комплексное обследование питомца', 800),
+('Прививка от бешенства', 'Процедура вакцинации от бешенства', 600),
+('Ультразвуковое исследование животного', 'Исследование органов при помощи ультразвука', 1200),
+('Кастрация кота', 'Хирургическое удаление половых органов у кота', 1500),
+('Стрижка когтей', 'Подрезание когтей у животного', 200),
+('Экстренная операция', 'Неотложная операция при острой патологии', 2500),
+('Диагностика паразитарных заболеваний', 'Анализ и лечение паразитов', 700),
+('Зубная чистка', 'Процедура гигиенической чистки зубов у животного', 900),
+('Лечение кожных заболеваний', 'Лечение и обработка кожных заболеваний', 1000),
+('Физиотерапия', 'Процедуры физического воздействия для лечения', 800),
+('ЭКГ', 'Электрокардиография для исследования сердца', 1300),
+('Рентген', 'Исследование органов при помощи рентгеновского излучения', 1200),
+('Анализ крови', 'Общий анализ крови для диагностики заболеваний', 400),
+('УЗИ брюшной полости', 'Ультразвуковое исследование органов брюшной полости', 1000),
+('Лечение инфекционных заболеваний', 'Процедуры по лечению инфекционных заболеваний', 900),
+('Иммуносупрессивная терапия', 'Терапия для подавления иммунной реакции', 1100),
+('Лазерная терапия', 'Терапевтическое воздействие лазерным излучением', 800),
+('Гнойная хирургия', 'Хирургическое вмешательство при гнойных процессах', 1300),
+('Лечение опорно-двигательной системы', 'Процедуры восстановления опорно-двигательной системы', 1000),
+('Травматология', 'Лечение травм и переломов у животных', 1200);

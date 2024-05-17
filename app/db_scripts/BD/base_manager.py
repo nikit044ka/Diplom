@@ -23,7 +23,7 @@ class DBManager:
     def create_base(self):
         conn, cur = self.connect_to_base()
         try:
-            cur.executescript(open(DB_SCRIPTS_PATH).read())
+            cur.executescript(open(DB_SCRIPTS_PATH, encoding='utf-8').read())
             conn.commit()
             print('Tables are created')
         except sqlite3.Error as ex:
@@ -40,12 +40,11 @@ class DBManager:
             conn.commit()
             last_row_id = cur.lastrowid
             if result == None or result == []:
-                return {"code": 201, 'lastrowid': last_row_id}
+                return {"code": 201}
             else:
                 return {"code": 200, "data": result, 'lastrowid': last_row_id}
         except sqlite3.Error as er:
-            print(str(er))
-            return {"code": 400}
+            return {"code": 400, 'eror': str(er)}
         finally:
             conn.close()
             
