@@ -39,7 +39,7 @@ class DBManager:
             result = res.fetchall() if many else res.fetchone()
             conn.commit()
             if result == None or result == []:
-                return {"code": 201}
+                return {"code": 201, "data": None}
             else:
                 return {"code": 200, "data": result}
         except sqlite3.Error as er:

@@ -26,6 +26,44 @@ class UserDatabaseScripts(DBManager):
             self.post_id = req['data'][5]
             
         return req
+    
+    def get_user(self, user_id):
+        req = self.execute("SELECT id, fio, phone, addres, email, post_id "
+                        "FROM users "
+                        "WHERE id= ? ", 
+                        args=(user_id, ), many=False)
         
+        if req['code'] == 200:
+            resp = {
+                'code': 200,
+                'data':{
+                    'id': req['data'][0],
+                    'fio': req['data'][1],
+                    'phone': req['data'][2],
+                    'addres': req['data'][3],
+                    'email': req['data'][4],
+                    'post_id': req['data'][5]
+                }
+            }
+            
+            return resp
+            
+        return req
+    
+    def get_users(self):
+        req = self.execute("SELECT id, fio, phone, addres, email, post_id "
+                        "FROM users ")
+            
+        return req
+    
+    def get_post(self, post_id):
+        req = self.execute("SELECT name "
+                        "FROM posts "
+                        "WHERE id= ? ", 
+                        args=(post_id, ), many=False)
+        if req['code'] == 200:
+            return req['data'][0]
+        
+        return req
         
 user = UserDatabaseScripts()

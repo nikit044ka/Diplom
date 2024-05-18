@@ -24,17 +24,18 @@ CREATE TABLE users (
     login VARCHAR(50),
     password VARCHAR(50),
     post_id INT,
-    FOREIGN KEY (post_id) REFERENCES posts(id)
+    FOREIGN KEY (post_id) REFERENCES posts(id),
+    UNIQUE (password) ON CONFLICT IGNORE
 );
 
 CREATE TABLE patients (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name  VARCHAR(100),
     date_birth DATA,
-    breed_id INT,
     kind_id INT,
-    FOREIGN KEY (breed_id) REFERENCES breeds(id),
-    FOREIGN KEY (kind_id) REFERENCES kinds(id)
+    breed_id INT,
+    FOREIGN KEY (kind_id) REFERENCES kinds(id),
+    FOREIGN KEY (breed_id) REFERENCES breeds(id)
 );
 
 CREATE TABLE procedures (
@@ -47,7 +48,7 @@ CREATE TABLE procedures (
 CREATE TABLE orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     data DATA,
-    comment  DTEXTATA,
+    comment TEXT,
     procedure_id INT,
     user_id INT,
     patient_id INT,
