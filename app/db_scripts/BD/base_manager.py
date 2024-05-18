@@ -4,8 +4,8 @@ from .settings import DB_PATH, DB_SCRIPTS_PATH
 
 
 class DBManager:
-    def __init__(self, db_path: str):
-        self.db_path = db_path
+    def __init__(self):
+        self.db_path = DB_PATH
         if not self.check_base():
             self.create_base()
 
@@ -38,15 +38,11 @@ class DBManager:
             res = cur.execute(query, args)
             result = res.fetchall() if many else res.fetchone()
             conn.commit()
-            last_row_id = cur.lastrowid
             if result == None or result == []:
                 return {"code": 201}
             else:
-                return {"code": 200, "data": result, 'lastrowid': last_row_id}
+                return {"code": 200, "data": result}
         except sqlite3.Error as er:
             return {"code": 400, 'eror': str(er)}
         finally:
             conn.close()
-            
-
-base_manager = DBManager(DB_PATH)
