@@ -23,3 +23,4 @@ class CreateProcedureWindow(QMainWindow, Ui_CreateProcedureWindow):
         if name and comment and price:
             procedure.create_procedure(name, comment, int(price))
             self.close()
+            

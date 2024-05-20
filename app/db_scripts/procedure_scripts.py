@@ -37,5 +37,12 @@ class ProcedureDatabaseScripts(DBManager):
                         args=(name, comment, price, ), many=False)
         
         return req
+    
+    def delete_procedure(self, id_procedure):
+        req = self.execute("DELETE FROM procedures "
+                         "WHERE id = ?",
+                        args=(id_procedure, ))
+        
+        return req
         
 procedure = ProcedureDatabaseScripts()

@@ -59,7 +59,8 @@ class UserDatabaseScripts(DBManager):
     
     def get_users(self):
         req = self.execute("SELECT id, fio, phone, addres, email, post_id "
-                        "FROM users ")
+                        "FROM users "
+                        "WHERE post_id= 2 ")
             
         return req
     
@@ -70,6 +71,13 @@ class UserDatabaseScripts(DBManager):
                         args=(post_id, ), many=False)
         if req['code'] == 200:
             return req['data'][0]
+        
+        return req
+    
+    def delete_user(self, id_user):
+        req = self.execute("DELETE FROM users "
+                         "WHERE id = ?",
+                        args=(id_user, ))
         
         return req
         
