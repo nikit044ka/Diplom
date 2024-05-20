@@ -27,6 +27,13 @@ class UserDatabaseScripts(DBManager):
             
         return req
     
+    def create_user(self, fio, phone, addres, email, login, password, post_id=2):
+        req = self.execute("INSERT INTO users(fio, phone, addres, email, login, password, post_id) "
+                        "VALUES (?, ?, ?, ?, ?, ?, ?) ", 
+                        args=(fio, phone, addres, email, login, password, post_id, ), many=False)
+        
+        return req
+    
     def get_user(self, user_id):
         req = self.execute("SELECT id, fio, phone, addres, email, post_id "
                         "FROM users "

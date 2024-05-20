@@ -32,6 +32,26 @@ class PatientDatabaseScripts(DBManager):
             
         return req
     
+    def create_patient(self, name, date_birth, breed_id, kind_id):
+        req = self.execute("INSERT INTO patients(name, date_birth, kind_id, breed_id) "
+                        "VALUES (?, ?, ?, ?) ", 
+                        args=(name, date_birth, breed_id, kind_id, ), many=False)
+        
+        return req
+    
+    def delete_patient(self, id_product):
+        req = self.execute("DELETE FROM patients "
+                         "WHERE id = ?",
+                        args=(id_product, ))
+        
+        return req
+    
+    def get_kinds(self):
+        req = self.execute("SELECT * "
+                        "FROM kinds ")
+        
+        return req
+    
     def get_kind(self, kind_id):
         req = self.execute("SELECT name "
                         "FROM kinds "
@@ -39,6 +59,12 @@ class PatientDatabaseScripts(DBManager):
                         args=(kind_id, ), many=False)
         if req['code'] == 200:
             return req['data'][0]
+        
+        return req
+    
+    def get_breeds(self):
+        req = self.execute("SELECT * "
+                        "FROM breeds ")
         
         return req
     

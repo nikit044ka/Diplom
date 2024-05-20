@@ -30,5 +30,12 @@ class ProcedureDatabaseScripts(DBManager):
             return resp
             
         return req
+    
+    def create_procedure(self, name, comment, price):
+        req = self.execute("INSERT INTO procedures(name, comment, price) "
+                        "VALUES (?, ?, ?) ", 
+                        args=(name, comment, price, ), many=False)
+        
+        return req
         
 procedure = ProcedureDatabaseScripts()
