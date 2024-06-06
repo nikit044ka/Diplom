@@ -25,7 +25,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.patients_btn.clicked.connect(self.print_all_patients)
         self.create_patients_btn.clicked.connect(self.create_patient)
         self.users_btn.clicked.connect(self.print_all_users)
-        self.create_users_btn.clicked.connect(self.create_user)
+        if user.post_id == 1:
+            self.create_users_btn.clicked.connect(self.create_user)
+        else:
+            self.create_users_btn.hide()
         self.procedures_btn.clicked.connect(self.print_all_procedures)
         self.create_procedures_btn.clicked.connect(self.create_procedure)
         self.orders_btn.clicked.connect(self.print_all_orders)
@@ -73,6 +76,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def print_all_users(self):
         self.clear_table()
         users = user.get_users()['data']
+
         
         if users:
             row = len(users)
