@@ -1,5 +1,4 @@
-
-from PyQt6.QtWidgets import QMainWindow, QTableWidgetItem, QPushButton
+from PyQt6.QtWidgets import QMainWindow, QTableWidgetItem, QPushButton, QMessageBox
 from .forms.main_form_ui import Ui_MainWindow
 from .create_patient import CreatePatient
 from .create_user import CreateUserWindow
@@ -25,23 +24,36 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.patients_btn.clicked.connect(self.print_all_patients)
         self.create_patients_btn.clicked.connect(self.create_patient)
         self.users_btn.clicked.connect(self.print_all_users)
-        if user.post_id == 1:
-            self.create_users_btn.clicked.connect(self.create_user)
-        else:
-            self.create_users_btn.hide()
+        self.create_users_btn.clicked.connect(self.create_user)
         self.procedures_btn.clicked.connect(self.print_all_procedures)
         self.create_procedures_btn.clicked.connect(self.create_procedure)
         self.orders_btn.clicked.connect(self.print_all_orders)
         self.create_orders_btn.clicked.connect(self.create_order)
         
+        if user.post_id == 2:
+            self.create_users_btn.hide()
+        
     def clear_table(self):
         self.data_table.clear()
         self.data_table.setRowCount(0)
         self.data_table.setColumnCount(0)
+        
+    def warning_window(self, titel, text):
+        '''Вывод окна с предупреждением'''
+        message_box = QMessageBox()
+        message_box.setWindowTitle(titel)
+        message_box.setText(text)
+        message_box.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        result = message_box.exec()
+        if result == QMessageBox.StandardButton.Yes:
+            return True
+        else:
+            return False
     
     def delete_patient(self, patient_id):
-        patient.delete_patient(patient_id)
-        self.print_all_patients()
+        if self.warning_window('Удаление пациента', 'Удалить пациента?'):
+            patient.delete_patient(patient_id)
+            self.print_all_patients()
     
     def print_all_patients(self):
         self.clear_table()
@@ -70,13 +82,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.main_window.show()
         
     def delete_user(self, user_id):
-        user.delete_user(user_id)
-        self.print_all_users()
+        if self.warning_window('Удаление пользователя', 'Удалить пользователя?'):
+            user.delete_user(user_id)
+            self.print_all_users()
         
     def print_all_users(self):
         self.clear_table()
         users = user.get_users()['data']
-
         
         if users:
             row = len(users)
@@ -106,8 +118,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.main_window.show()
 
     def delete_procedure(self, procedure_id):
-        procedure.delete_procedure(procedure_id)
-        self.print_all_procedures()
+        if self.warning_window('Удаление процедуры', 'Удалить процедуру?'):
+            procedure.delete_procedure(procedure_id)
+            self.print_all_procedures()
         
     def print_all_procedures(self):
         self.clear_table()

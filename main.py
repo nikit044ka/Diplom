@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QApplication
 import sys
 from app.login import Login
-from app.create_patient import CreatePatient
 
 
 if __name__ == '__main__': 
